@@ -1,12 +1,18 @@
 from os import system
+import colorama
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_absolute_error 
+from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
-df = pd.read_csv(r"c:\Users\user\Desktop\Study\Codes\Artificial intelligence & Machine learning\Projects\Student Grade Predictor (Simple Linear Regression)\Grades.csv")
+try:
+    df = pd.read_csv(r"c:\Users\user\Desktop\Study\Codes\Artificial intelligence & Machine learning\Projects\Student Grade Predictor (Simple Linear Regression)\Grades.csv")
+except FileNotFoundError:
+    print(colorama.Fore.RED + "Error cant find the csv file please check the location and readjust accordingly.")
+    print(colorama.Fore.RESET)
+    exit()
 print(df.sample(10))
 
 # preprocess data
@@ -51,7 +57,7 @@ def Grade_evaluate(score):
         return 'A'
     
 system("cls")       # clears console
-print(r'''                     .;                                   .              .-.                           .-.                                           .             
+print(colorama.Fore.MAGENTA + r'''                     .;                                   .              .-.                           .-.                                           .             
 .;.       .-.       .;'                               ...;...     .;;.`-'                    .'       (_) )-.                   .'   .-.         ...;...       .-. 
   `;     ;' .-.    .;  .-.   .-.  . ,';.,';.  .-.      .'.-.     ;; (_;    .;.::..-.    .-..'  .-.      .:   \  .;.::..-.  .-..'     `-' .-.      .'.-.  .;.::.`-' 
    ;;    ;.;.-'   ::  ;     ;   ;';;  ;;  ;;.;.-'    .; ;   ;'  ;;         .;   ;   :  :   ; .;.-'     .:'    ) .;  .;.-' :   ;     ;'  ;       .; ;   ;'.;   .-.  
@@ -59,9 +65,18 @@ print(r'''                     .;                                   .           
   `;.' `.;'                     _;        `-'                  `;.___.'                             (_/                                                            
 ''')
 
-Input = float(input("Enter Hours of study: "))
+while(True):
+    try:
+        Input = float(input(colorama.Style.RESET_ALL + "Enter Hours of study: "))
+        break
+    except ValueError:
+        print(colorama.Fore.RED + "INCORRECT INPUT PLEASE ENTER A VALID NUMBER")
+
 Input = np.array([round(Input, 2)])
 Final_Score = model.predict(Input.reshape(-1, 1))
 print("Final Score = " + str(round(Final_Score[0][0], 2)))
 print("Grade = " + Grade_evaluate(Final_Score[0][0]))
-print("The mean absolute error of this model is: " + str(round(mean_absolute_error(Y_test.reshape(-1, 1), model.predict(X_test.reshape(-1, 1))), 3)))
+print("The mean absolute error of this model is: " + colorama.Fore.LIGHTGREEN_EX + str(round(mean_absolute_error(Y_test.reshape(-1, 1), model.predict(X_test.reshape(-1, 1))), 3)))
+print(colorama.Fore.RESET + "The R^2 Score: " + colorama.Fore.LIGHTGREEN_EX + str(round(r2_score(Y_test.reshape(-1, 1), model.predict(X_test.reshape(-1, 1))), 2)))
+print(colorama.Fore.BLUE + "ps: R^2 score is indication of how accurate the model is (the closer to 1 the better)")
+print(colorama.Fore.RESET)
