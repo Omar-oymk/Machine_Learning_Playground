@@ -4,20 +4,20 @@
 
 
 ##### 1. Linear Regression
-- [X] Simple Linear Regression
-- [ ] Polynomial Linear Regression
-- [ ] Linear Regression Using Regularization Techniques 
+- ✅ Simple Linear Regression
+- ⚪ Polynomial Linear Regression
+- ⚪ Linear Regression Using Regularization Techniques 
 
 
 ##### 2. Logistic Regression
-- [ ] Logistic Regression
+- ⚪ Logistic Regression
 
 
 ##### 3. K-Nearest-Neighbours
-- [ ] K-Nearest-Neighbours For Classification
-- [ ] K-Nearest-Neighbours For Regression
+- ⚪ K-Nearest-Neighbours For Classification
+- ⚪ K-Nearest-Neighbours For Regression
 
 
 ##### 4. Decision Trees
-- [ ] Decision Trees For Classification
-- [ ] Decision Trees For Regression
+- ⚪ Decision Trees For Classification
+- ⚪ Decision Trees For Regression
