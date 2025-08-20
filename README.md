@@ -4,7 +4,7 @@
 
 
 ##### 1. Linear Regression
-- [x] Simple Linear Regression
+- [X] Simple Linear Regression
 - [ ] Polynomial Linear Regression
 - [ ] Linear Regression Using Regularization Techniques 
 
