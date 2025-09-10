@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
+import random
+
 # loading data
 df = pd.read_csv(r"C:\Users\user\Downloads\train.csv")
 print(f"{df.head()}\n")
-
+print(f"{df.info()}\n")
 
 # region PREPROCESSING DATA
 
@@ -59,10 +61,79 @@ print(f"\n{df.head()}")
 # another features it to decide whether u want it to shuffle randomly and based on a pseudorandom number generator or not
 
 # to do so we declare parameters values = none so that the user isnt obliged to input them
-def train_test_split(train_size = None, test_size = None, shuffle = None, random_state = None):
+def train_test_split(X : pd.DataFrame, Y : pd.DataFrame, train_size = None, test_size = None, shuffle = None, random_state = None):
 
     # now handle the default actions
-    if (train_size == None & test_size == None):
-        if(shuffle == True):
-            if(random_state != None):
-                return df.abs
+    if (train_size == None and test_size == None):
+        train_size = 0.75
+        test_size = 0.25
+    elif (train_size != None):  test_size = 1 - train_size
+    elif (test_size != None):   train_size = 1 - test_size
+
+    if (shuffle == None and random_state != None): shuffle = True
+    elif (shuffle == None): shuffle = False
+
+    if(shuffle == False):
+        # calculate the number of rows 
+        n = (int)(len(X) * train_size)
+        x_train, x_test, y_train, y_test = X.head(n), X.tail(len(X) - n), Y.head(n), Y.tail(len(Y) - n)     # take the top then the rest from bottom
+    
+    elif(shuffle == True):
+        # alright so after doing some research on the scikitlearn version of this fn apparently it makes a list of indicies then shuffles them based on seed
+        # then it returns it onto the x and y 
+        list_of_indicies = []
+        rows, columns = X.shape
+        for index in range(rows):
+            list_of_indicies.append(index)
+        
+        random.seed(random_state)       # set the random seed to shuffle with the exact seed the user declared
+        random.shuffle(list_of_indicies)
+
+        shuffled_x = X.iloc[list_of_indicies]
+        shuffled_y = Y.iloc[list_of_indicies]
+        
+        # now split the data
+        n = (int)(len(X) * train_size)
+        x_train, x_test, y_train, y_test = shuffled_x.head(n), shuffled_x.tail(len(X) - n), shuffled_y.head(n), shuffled_y.tail(len(Y) - n)     # take the top then the rest from bottom
+        
+    return x_train, x_test, y_train, y_test
+
+
+X = df[["Pclass", "Is_male"]]
+Y = df[["Survived"]]
+
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size= 0.20, random_state= 42)
+
+# print(x_train)
+# print(x_test)
+# print(y_train)
+# print(y_test)
+
+#endregion
+
+# region DEFINING TRAINING FUNCTIONS
+
+# initial weights
+
+# first get number of columns (features)
+rows, cols, = x_train.shape
+
+w = np.zeros(cols)          # THIS CREATES AN ARRAY OF WEIGHTS ALL INITIALIZED AS 0 (so for example feature 1 has w1 = 0, feature 2 has w2 = 0, etc....)
+                                        # why as numpy array? well cause i want to dot product anyways between the w and features
+b = 0
+
+def predict(X):
+    # first turn x from dataframe ---> numpy array
+    X = X.values
+    z = np.dot(X, w) + b
+    return z
+
+def sigmoid(Z):
+    return 1/(1+np.exp(-Z))
+
+def loss_function(x_train, y_train):
+
+    sum = np.sum(y_train * np.log(sigmoid(predict(x_train))) + (1 - y_train) * np.log(1 - sigmoid(predict(x_train))))
+    return -(1/rows) * sum
+
+#endregion
