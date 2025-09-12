@@ -167,7 +167,6 @@ def gradient_descent(DcostDw, DcostDb, learning_rate):
 
 #endregion
 
-
 # region training loop
 def LogisticRegressionfit(x_train, y_train, x_test, y_test, epochs, learning_rate):
 
