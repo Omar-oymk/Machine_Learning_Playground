@@ -180,4 +180,4 @@ def LogisticRegressionfit(x_train, y_train, x_test, y_test, epochs, learning_rat
         w, b = gradient_descent(dw, db, learning_rate)
 #endregion
 
-LogisticRegressionfit(x_train, y_train, x_test, y_test, 10000, 0.01)
+LogisticRegressionfit(x_train, y_train, x_test, y_test, epochs = 10000, learning_rate = 0.01)
