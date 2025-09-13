@@ -62,3 +62,28 @@ def train_test_split(X, Y, train_size = None, test_size = None, shuffle = False,
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size= 0.8)
 
 # start training
+class KNN:
+
+    def __init__(self, k):
+        self.k = k
+
+    def Fit(self, x_train, y_train):
+        self.x_train = x_train.values
+        self.y_train = y_train.values
+
+    def predict(self, x):
+        distances = np.sqrt(np.sum((self.x_train - x) ** 2, axis = 1))
+        distancesOrdered = np.argsort(distances)
+        pickedDistances = distancesOrdered[:self.k]
+        pickedLabels = self.y_train[pickedDistances]
+        most_common = Counter(pickedLabels).most_common(1)[0][0]
+        
+        return most_common
+    
+
+
+model = KNN(3)
+
+model.Fit(x_train, y_train)
+
+print(model.predict(1))
