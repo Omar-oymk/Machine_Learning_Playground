@@ -16,7 +16,7 @@
 - ⚪ Logistic Regression Using Regularization Techniques
 
 ##### 3. K-Nearest-Neighbours
-- ⚪ K-Nearest-Neighbours For Classification
+- ✅ K-Nearest-Neighbours For Classification
 - ⚪ K-Nearest-Neighbours For Regression
 
 ##### 4. Decision Trees
