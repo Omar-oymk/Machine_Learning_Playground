@@ -72,12 +72,23 @@ class KNN:
         self.y_train = y_train.values
 
     def predict(self, x):
+        # predictions = []
+        # for x in x_test:
+        # first calculate sum of distances where 
+        # dist between 2 points = (x1-x2)^2
+        # sum all of them then square root the whole thing using sum without axis will return only 1 scalar value
+        # = sum of all elements in the array
         distances = np.sqrt(np.sum((self.x_train - x) ** 2, axis = 1))
+        # this returns an array of indicies that sorts ascendingly based on the parameter inside (which should be a numerical value)
         distancesOrdered = np.argsort(distances)
+        # slice the list and take only the first k indicies
         pickedDistances = distancesOrdered[:self.k]
+        # take the values of these indices in a new array
         pickedLabels = self.y_train[pickedDistances]
+        # count the elements then take the most common 1 [0][0] to take the label
         most_common = Counter(pickedLabels).most_common(1)[0][0]
-        
+        # predictions.append(most_common)
+
         return most_common
     
 
@@ -86,4 +97,4 @@ model = KNN(3)
 
 model.Fit(x_train, y_train)
 
-print(model.predict(1))
+print(model.predict(5))
