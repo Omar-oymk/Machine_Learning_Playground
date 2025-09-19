@@ -1,0 +1,117 @@
+import numpy as np
+import pandas as pd
+
+
+# load dataset
+df = pd.read_csv(r"C:\Users\user\Downloads\archive (1)\house_price_regression_dataset.csv")
+print(df.head())
+print(f"\n{df.info()}")
+
+#region preprocessing
+## use scaling (using standardization)
+
+def ZScoreStandardization(X):
+    return (X - X.mean()) / X.std()
+
+## correlation to remove redundant features
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.heatmap(df.corr().abs(), cmap="coolwarm")
+plt.show()
+
+### from that we can see that it is highly with lot_size, garage_size and year_built
+### however the lot_size is kinda highly corr with year_built so we will just use the lot_size for the sake of simplicity
+
+X = df[["Lot_Size", "Garage_Size"]]
+X = ZScoreStandardization(X)
+Y = df["House_Price"]
+Y_mean = Y.mean()
+Y_std = Y.std()
+Y = ZScoreStandardization(Y)
+
+# now we split the data into training and testing data
+def train_test_split(X, Y, train_size = None, test_size = None, shuffle = False, random_state = 0):
+    if(train_size is not None and test_size is not None): raise ValueError("Cannot define both test and train size at the same time")
+    if(train_size is not None): 
+        if(0 <= train_size <= 1): test_size = 1 - train_size
+        else: raise ValueError("train_size has to be between 0 and 1 inclusive")
+    elif(test_size is not None): 
+        if(0 <= test_size <= 1): train_size = 1 - test_size
+        else: raise ValueError("train_size has to be between 0 and 1 inclusive")
+    else:
+        train_size = 0.75
+        test_size = 0.25
+
+    n = (int)(train_size * len(X))
+    if (shuffle):
+        np.random.seed(random_state)
+        indicies_shuffled = np.random.permutation(len(X))
+        shuffled_x = X.iloc[indicies_shuffled]
+        shuffled_y = Y.iloc[indicies_shuffled]
+        x_train, x_test, y_train, y_test = shuffled_x[:n], shuffled_x[n:], shuffled_y[:n], shuffled_y[n:]
+    else:
+        x_train, x_test, y_train, y_test = X[:n], X[n:], Y[:n], Y[n:]
+
+    return x_train, x_test, y_train, y_test
+#endregion
+
+#region Model Training
+
+class LinearRegression:
+    
+    def __init__(self, epochs = 10000, learning_rate = 0.001):
+        self.epochs = epochs
+        self.learning_rate = learning_rate
+        self.coef_ = None
+        self.bias_ = None
+
+    def Fit(self, x_train, y_train):
+        x_train = x_train.values
+        y_train = y_train.values
+        self.coef_, self.bias_ = self._InitializeWeights(x_train)
+
+        for i in range(self.epochs):
+            if (i % 1000 == 0): 
+                print("---------------------------------------------")
+                print(f"MSE = {self._CostFunction(x_train, y_train)}")
+                print(f"RMSE = {np.sqrt(self._CostFunction(x_train, y_train))}")
+                print("---------------------------------------------")
+
+            self._GradientDescent(x_train, y_train)
+
+
+    def _InitializeWeights(self, x_train):
+        self.coef_ = np.zeros(x_train.shape[1])
+        self.bias_ = 0
+        return self.coef_, self.bias_
+
+    def _Linear(self, x_train):
+        return np.dot(x_train, self.coef_) + self.bias_
+
+    def _CostFunction(self, x_train, y_train):
+        # mse fn 
+        return (1/x_train.shape[0]) * np.sum((self._Linear(x_train) - y_train)**2)
+
+    def _Gradient(self, x_train, y_train):
+        # dCostdWeights = -(1/x_train.shape[0]) * 2 * np.sum(x_train * (self._Linear(x_train) - y_train))     # this will only work if it were for 1 feature
+        dCostdWeights = (1/x_train.shape[0]) * 2 * np.dot(x_train.T, (self._Linear(x_train) - y_train))
+        dCostdBias = (1/x_train.shape[0]) * 2 * np.sum((self._Linear(x_train) - y_train))
+        return dCostdWeights, dCostdBias
+    
+    def _GradientDescent(self, x_train, y_train):
+        dCostWeights, dcostBias = self._Gradient(x_train, y_train)
+        self.coef_ = self.coef_ - self.learning_rate * dCostWeights
+        self.bias_ = self.bias_ - self.learning_rate * dcostBias
+
+    def Predict(self, x_test):
+        return self._Linear(x_test) * Y_std + Y_mean
+    
+#endregion
+
+#region main.py
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size = 0.2, shuffle = True, random_state = 42)
+model = LinearRegression()
+model.Fit(x_train, y_train)
+print(model.Predict(x_test))
+#endregion
