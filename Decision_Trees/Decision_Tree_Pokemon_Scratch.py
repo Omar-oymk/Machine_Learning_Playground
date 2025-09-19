@@ -40,3 +40,4 @@ X = [[df["Total"]]]
 Y = [df["Legendary"]]
 
 #endregion
+
