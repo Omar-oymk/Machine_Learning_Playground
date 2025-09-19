@@ -5,7 +5,7 @@
 
 ##### 1. Linear Regression
 - ✅ Simple Linear Regression
-- ⚪ Multiple Linear Regression
+- ✅ Multiple Linear Regression
 - ⚪ Polynomial Linear Regression
 - ⚪ Linear Regression Using Regularization Techniques [Ridge, Lasso, Elastic Net]
 
