@@ -36,8 +36,8 @@ print(df.corr())
 (df.corr()).to_csv(r"C:\Users\user\Downloads\pokemoncorr.csv")
 # for simplicity's sake since this is an implemenatation from scratch ill only keep
 # the total which is corr by approx 0.5
-X = [[df["Total"]]]
-y = [df["Legendary"]]
+X = df[["Total"]]
+y = df["Legendary"]
 
 #endregion
 
