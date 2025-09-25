@@ -66,4 +66,22 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, random_state = 42)
 #endregion
 
 #region decision trees implementation
+class DecisionTrees:
+    def __init__(self):
+        pass
+
+
+    def _entropy(y):
+        sum = 0
+        for label in y.unique():
+            # first calculate probability
+            prob = y.value_counts()[label]/y.shape[0]
+
+            # calculate entropy of this iteration
+            entrop = prob * np.log2(prob)
+
+            # then subtract from sum
+            sum -= entrop
+        
+        return sum
 #endregion
