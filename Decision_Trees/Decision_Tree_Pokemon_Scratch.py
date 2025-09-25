@@ -87,4 +87,10 @@ class DecisionTrees:
     
     def _information_gain(y, left_y, right_y):
         pass
+
+    def _split(X, y, feature_name, threshold):
+        pass
+
+    def _best_split(X, y):
+        pass
 #endregion
