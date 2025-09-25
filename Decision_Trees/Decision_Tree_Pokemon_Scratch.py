@@ -84,4 +84,7 @@ class DecisionTrees:
             sum -= entrop
         
         return sum
+    
+    def _information_gain(y, left_y, right_y):
+        pass
 #endregion
