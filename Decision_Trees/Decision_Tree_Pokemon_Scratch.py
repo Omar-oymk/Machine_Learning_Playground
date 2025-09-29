@@ -70,7 +70,7 @@ class DecisionTrees:
     def __init__(self):
         pass
 
-    @classmethod
+
     def _entropy(y):
         sum = 0
         for label in y.unique():
