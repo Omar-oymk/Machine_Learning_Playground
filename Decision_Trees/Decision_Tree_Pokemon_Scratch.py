@@ -66,6 +66,19 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, random_state = 42)
 #endregion
 
 #region decision trees implementation
+class Node:
+    def __init__(self, value = None, feature = None, info_gain = None, threshold = None, left = None, right = None):
+        
+        # if it is a decision node
+        self.feature = feature
+        self.threshold = threshold
+        self.info_gain = info_gain
+        self.left = left
+        self.right = right
+
+        # if it is a leaf node
+        self.value = value
+        
 class DecisionTrees:
     def __init__(self):
         pass
